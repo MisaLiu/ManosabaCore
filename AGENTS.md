@@ -13,6 +13,7 @@
 - `voice/` is an optional runtime-gated Simple Voice Chat integration. `talkbubbles/` implements the `talkbubbles:bubble` plugin-message protocol for the Fabric client mod.
 - `tablist/` contains the pure spectator-masking decision, state snapshot, Bukkit bridge, and isolated ProtocolLib adapter. Runtime support targets Paper 1.21.10 with a ProtocolLib build verified for that server version.
 - `src/main/resources/plugin.yml` is filtered from `gradle.properties` for version and description. Keep plugin metadata, permissions, and command declarations in sync with the Java command implementation.
+- The standalone `/hub`, `/checkperm`, and `/reset` commands are fixed adapters for the companion map datapack; their targets are defined in `command/DatapackAliases` and are not configurable.
 
 ## Runtime Contracts
 
@@ -22,3 +23,4 @@
 - `config.yml` is the source of truth for behavior and integration defaults. TalkBubbles is optional and silently skips clients that do not register its channel.
 - Tablist masking requires ProtocolLib and defaults on. It only masks `dead=true`, `Playing=1`, real `SPECTATOR` players from active/alive viewers without `manosaba.tablist.reveal`; other plugins that modify tablist game modes are unsupported conflicts.
 - Compile against `net.dmulloy2:ProtocolLib:5.4.0`, but deploy a ProtocolLib build verified for Paper 1.21.10; runtime capability failure disables only the tablist module and `/manosaba reload` retries it.
+- The map aliases require no startup datapack check: `/hub` runs `trigger hub` as the player, `/checkperm` runs the permission function as/at the player, and `/reset` runs the debug function as console. Dispatch failure notifies the sender and logs the full target command.

@@ -47,6 +47,10 @@ public final class ManosabaCore extends JavaPlugin {
             getLogger().warning("Command 'manosaba' is not declared in plugin.yml; /manosaba will be unavailable.");
         }
 
+        registerAliasCommand("hub", executor);
+        registerAliasCommand("checkperm", executor);
+        registerAliasCommand("reset", executor);
+
         this.voicechatBridge = new VoicechatBridge(this);
         this.voicechatBridge.enable();
         this.tablistBridge = new TablistBridge(this);
@@ -56,6 +60,16 @@ public final class ManosabaCore extends JavaPlugin {
                 + ", range=" + chatConfig.range() + ", line-of-sight=" + chatConfig.requireLineOfSight()
                 + ", only-during-game=" + chatConfig.gameState().onlyDuringGame()
                 + ", voicechat=" + chatConfig.voicechat().enabled() + ").");
+    }
+
+    private void registerAliasCommand(@NotNull String name, @NotNull ManosabaCommand executor) {
+        PluginCommand command = getCommand(name);
+        if (command == null) {
+            getLogger().warning("Command '" + name + "' is not declared in plugin.yml; /" + name + " will be unavailable.");
+            return;
+        }
+        command.setExecutor(executor);
+        command.setTabCompleter(executor);
     }
 
     @Override

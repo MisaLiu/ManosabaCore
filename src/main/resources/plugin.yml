@@ -16,6 +16,21 @@ commands:
     usage: /<command> [reload|version|help]
     aliases: [mc, manosabacore]
     permission: manosaba.command
+  hub:
+    description: Return to the map hub.
+    usage: /hub
+    permission: manosaba.alias.hub
+    permission-message: You do not have permission to use this command.
+  checkperm:
+    description: Check the current map permissions.
+    usage: /checkperm
+    permission: manosaba.alias.checkperm
+    permission-message: You do not have permission to use this command.
+  reset:
+    description: Reload Manosaba map debug state.
+    usage: /reset
+    permission: manosaba.alias.reset
+    permission-message: You do not have permission to use this command.
 
 permissions:
   manosaba.command:
@@ -23,6 +38,22 @@ permissions:
     default: true
   manosaba.command.reload:
     description: Reload ManosabaCore configuration from disk.
+    default: op
+  manosaba.alias:
+    description: Use all Manosaba map command aliases.
+    default: false
+    children:
+      manosaba.alias.hub: true
+      manosaba.alias.checkperm: true
+      manosaba.alias.reset: true
+  manosaba.alias.hub:
+    description: Use the /hub map command alias.
+    default: true
+  manosaba.alias.checkperm:
+    description: Use the /checkperm map command alias.
+    default: op
+  manosaba.alias.reset:
+    description: Use the /reset map command alias.
     default: op
   manosaba.chat.bypass.send:
     description: Sender's chat ignores proximity restrictions.
