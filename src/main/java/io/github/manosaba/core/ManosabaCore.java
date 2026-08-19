@@ -3,6 +3,7 @@ package io.github.manosaba.core;
 import io.github.manosaba.core.chat.ProximityChatListener;
 import io.github.manosaba.core.command.ManosabaCommand;
 import io.github.manosaba.core.config.ProximityChatConfig;
+import io.github.manosaba.core.tablist.TablistBridge;
 import io.github.manosaba.core.talkbubbles.TalkBubblesBridge;
 import io.github.manosaba.core.voice.VoicechatBridge;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ public final class ManosabaCore extends JavaPlugin {
 
     private volatile ProximityChatConfig chatConfig;
     private VoicechatBridge voicechatBridge;
+    private TablistBridge tablistBridge;
 
     @Override
     public void onEnable() {
@@ -47,6 +49,8 @@ public final class ManosabaCore extends JavaPlugin {
 
         this.voicechatBridge = new VoicechatBridge(this);
         this.voicechatBridge.enable();
+        this.tablistBridge = new TablistBridge(this);
+        this.tablistBridge.enable();
 
         getLogger().info("ManosabaCore enabled (proximity-chat enabled=" + chatConfig.enabled()
                 + ", range=" + chatConfig.range() + ", line-of-sight=" + chatConfig.requireLineOfSight()
@@ -59,6 +63,10 @@ public final class ManosabaCore extends JavaPlugin {
         if (voicechatBridge != null) {
             voicechatBridge.disable();
             voicechatBridge = null;
+        }
+        if (tablistBridge != null) {
+            tablistBridge.disable();
+            tablistBridge = null;
         }
         Bukkit.getMessenger().unregisterIncomingPluginChannel(this, TalkBubblesBridge.CHANNEL);
         Bukkit.getMessenger().unregisterOutgoingPluginChannel(this, TalkBubblesBridge.CHANNEL);
@@ -79,8 +87,12 @@ public final class ManosabaCore extends JavaPlugin {
             chatSection = root.createSection(ProximityChatConfig.SECTION);
         }
         ConfigurationSection voicechatSection = root.getConfigurationSection(ProximityChatConfig.VOICECHAT_SECTION);
+        ConfigurationSection tablistSection = root.getConfigurationSection("tablist");
 
-        this.chatConfig = ProximityChatConfig.fromSection(chatSection, voicechatSection);
+        this.chatConfig = ProximityChatConfig.fromSection(chatSection, voicechatSection, tablistSection);
+        if (tablistBridge != null) {
+            tablistBridge.reload();
+        }
     }
 
     public @Nullable ProximityChatConfig chatConfig() {

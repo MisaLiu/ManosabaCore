@@ -24,14 +24,16 @@ public record ProximityChatConfig(
         @NotNull PlayingStateConfig playingState,
         @NotNull ChatFormatConfig chatFormat,
         @NotNull TalkBubblesConfig talkBubbles,
-        @NotNull VoicechatConfig voicechat
+        @NotNull VoicechatConfig voicechat,
+        @NotNull TablistConfig tablist
 ) {
 
     public static final String SECTION = "proximity-chat";
     public static final String VOICECHAT_SECTION = "voicechat";
 
     public static @NotNull ProximityChatConfig fromSection(@NotNull ConfigurationSection chatSection,
-                                                           ConfigurationSection voicechatSection) {
+                                                            ConfigurationSection voicechatSection,
+                                                            ConfigurationSection tablistSection) {
         boolean enabled = chatSection.getBoolean("enabled", true);
         double range = Math.max(0.0D, chatSection.getDouble("range", 48.0D));
         boolean requireLos = chatSection.getBoolean("require-line-of-sight", true);
@@ -44,6 +46,7 @@ public record ProximityChatConfig(
         ChatFormatConfig chatFormat = ChatFormatConfig.fromSection(chatSection.getConfigurationSection("chat-format"));
         TalkBubblesConfig talkBubbles = TalkBubblesConfig.fromSection(chatSection.getConfigurationSection("talkbubbles"));
         VoicechatConfig voicechat = VoicechatConfig.fromSection(voicechatSection);
+        TablistConfig tablist = TablistConfig.fromSection(tablistSection);
 
         return new ProximityChatConfig(
                 enabled,
@@ -57,7 +60,8 @@ public record ProximityChatConfig(
                 playingState,
                 chatFormat,
                 talkBubbles,
-                voicechat
+                voicechat,
+                tablist
         );
     }
 
@@ -326,6 +330,26 @@ public record ProximityChatConfig(
 
         public static @NotNull VoicechatConfig defaults() {
             return new VoicechatConfig(true, "Spectator", "OPEN", 20L);
+        }
+    }
+
+    /** Configuration for ProtocolLib-backed spectator-mode masking in tablist. */
+    public record TablistConfig(
+            boolean enabled,
+            long syncPeriodTicks
+    ) {
+        public static @NotNull TablistConfig fromSection(ConfigurationSection section) {
+            if (section == null) {
+                return defaults();
+            }
+            return new TablistConfig(
+                    section.getBoolean("enabled", true),
+                    Math.max(1L, section.getLong("sync-period-ticks", 20L))
+            );
+        }
+
+        public static @NotNull TablistConfig defaults() {
+            return new TablistConfig(true, 20L);
         }
     }
 }

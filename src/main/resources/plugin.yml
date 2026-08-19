@@ -8,7 +8,7 @@ load: POSTWORLD
 prefix: ManosabaCore
 folia-supported: false
 default-permission: op
-softdepend: [voicechat]
+softdepend: [voicechat, ProtocolLib]
 
 commands:
   manosaba:
@@ -30,3 +30,6 @@ permissions:
   manosaba.chat.bypass.receive:
     description: Always receive proximity-restricted chat regardless of distance.
     default: false
+  manosaba.tablist.reveal:
+    description: See the real game mode of dead players in the tablist.
+    default: op

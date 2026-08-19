@@ -17,6 +17,9 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
     compileOnly("de.maxhenkel.voicechat:voicechat-api:2.6.0")
+    compileOnly("net.dmulloy2:ProtocolLib:5.4.0")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
 }
 
 java {
@@ -24,6 +27,10 @@ java {
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
+
     compileJava {
         options.encoding = "UTF-8"
         options.release.set(21)

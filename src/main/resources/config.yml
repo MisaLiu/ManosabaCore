@@ -4,6 +4,18 @@
 # After editing, run /manosaba reload to apply changes.
 
 # -------------------------------------------------------------
+# tablist: spectator-mode masking
+# -------------------------------------------------------------
+# Requires a ProtocolLib build compatible with Paper 1.21.10 at runtime. Hides the spectator game-mode marker for
+# dead players who are still Playing=1, but only from active/alive viewers
+# without manosaba.tablist.reveal.
+tablist:
+  enabled: true
+  # Main-thread state and permission refresh period. Changes require a
+  # plugin disable/enable because the task is scheduled once.
+  sync-period-ticks: 20
+
+# -------------------------------------------------------------
 # proximity-chat: regional chat
 # Limits chat messages to nearby players only, optionally
 # blocked by solid walls between sender and receiver.
